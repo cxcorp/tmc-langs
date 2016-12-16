@@ -146,14 +146,17 @@ public class StudentFileAwareZipperTest {
         Enumeration<ZipArchiveEntry> entries = expected.getEntries();
         while (entries.hasMoreElements()) {
             ZipArchiveEntry entry = entries.nextElement();
-            expectedEntries.put(entry.getName(), entry);
+            // Forward slashes become backslashes on Windows...normalize them
+            String name = entry.getName().replace('\\', '/');
+            expectedEntries.put(name, entry);
         }
 
         Map<String, ZipArchiveEntry> actualEntries = new HashMap<>();
         entries = actual.getEntries();
         while (entries.hasMoreElements()) {
             ZipArchiveEntry entry = entries.nextElement();
-            actualEntries.put(entry.getName(), entry);
+            String name = entry.getName().replace('\\', '/');
+            actualEntries.put(name, entry);
         }
 
         assertEquals("Expected actual and expected zips to have same number of entries",
